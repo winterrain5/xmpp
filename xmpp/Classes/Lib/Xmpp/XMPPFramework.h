@@ -23,19 +23,45 @@
 //  The following is standard:
 
 #import "XMPP.h"
- 
+
+#pragma mark - 电子名片模块的头文件
+#import "XMPPvCardTempModule.h"
+#import "XMPPvCardCoreDataStorage.h"
+
+/**电子名片头像模块*/
+#import "XMPPvCardAvatarModule.h"
+
+#import "XMPPRosterMemoryStorage.h"  //遵循 XMPPRosterStorage接口
+#import "XMPPUserMemoryStorageObject.h" //遵循 XMPPUser接口
+
+
+/**花名册模块*/
+#import "XMPPRoster.h"
+#import "XMPPRosterCoreDataStorage.h"
+
+
+/**消息模块*/
+#import "XMPPMessageArchivingCoreDataStorage.h"
+#import "XMPPMessageArchiving.h"
+
+//文件传输
+//接收文件
+#import "XMPPIncomingFileTransfer.h"
+//发送文件
+#import "XMPPOutgoingFileTransfer.h"
+
 // List the modules you're using here:
 // (the following may not be a complete list)
-
+//#import "XMPPRosterMemoryStorage.h"
 //#import "XMPPBandwidthMonitor.h"
 // 
 //#import "XMPPCoreDataStorage.h"
 //
-//#import "XMPPReconnect.h"
+
+/**断网自动连接*/
+#import "XMPPReconnect.h"
 //
-//#import "XMPPRoster.h"
-//#import "XMPPRosterMemoryStorage.h"
-//#import "XMPPRosterCoreDataStorage.h"
+
 //
 //#import "XMPPJabberRPCModule.h"
 //#import "XMPPIQ+JabberRPC.h"
@@ -49,8 +75,7 @@
 //#import "XMPPRoomCoreDataStorage.h"
 //#import "XMPPRoomHybridStorage.h"
 //
-//#import "XMPPvCardTempModule.h"
-//#import "XMPPvCardCoreDataStorage.h"
+
 //
 //#import "XMPPPubSub.h"
 //
@@ -66,7 +91,7 @@
 //#import "XMPPCapabilities.h"
 //#import "XMPPCapabilitiesCoreDataStorage.h"
 //
-//#import "XMPPvCardAvatarModule.h"
+
 //
 //#import "XMPPMessage+XEP_0184.h"
 //

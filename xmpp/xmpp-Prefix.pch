@@ -8,8 +8,22 @@
 
 #ifndef xmpp_Prefix_pch
 #define xmpp_Prefix_pch
+#import "CSAccount.h"
+#import "CategoryWF.h"
+#import "CSXMPPTool.h"
+#define iSiPhoneDevice ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
 
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+//自定义日志
+
+#ifdef DEBUG
+#define CSLog(...) NSLog(@"%s %@\n\n",__func__,[NSString stringWithFormat:__VA_ARGS__])
+
+#else
+
+#endif
+
 
 #endif /* xmpp_Prefix_pch */

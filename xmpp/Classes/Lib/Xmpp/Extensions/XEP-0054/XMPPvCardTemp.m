@@ -322,10 +322,38 @@ NSString *const kXMPPvCardTempElement = @"vCard";
 - (void)clearTelecomsAddresses { }
 
 
-- (NSArray *)emailAddresses { return nil; }
+- (NSArray *)emailAddresses {
+    
+    //获取email 节点
+    
+    NSXMLElement *emailLe = [self elementForName:@"EMAIL"];
+    NSXMLElement *userIdEle = [emailLe elementForName:@"USERID"];
+//    NSArray *childen = [emailLe children];
+    NSString *emailStr = [userIdEle stringValue];
+    if (emailStr.length > 0) {
+        return @[emailStr];
+    }
+    CSLog(@"%@",userIdEle);
+    return nil;
+}
 - (void)addEmailAddress:(XMPPvCardTempEmail *)email { }
 - (void)removeEmailAddress:(XMPPvCardTempEmail *)email { }
-- (void)setEmailAddresses:(NSArray *)emails { }
+- (void)setEmailAddresses:(NSArray *)emails {
+    NSAssert(emails.count == 1, @"只能有一个邮箱");
+    
+    //获取email 节点
+    NSXMLElement *emailLe = [self elementForName:@"EMAIL"];
+//    NSXMLElement *userIdEle = [emailLe elementForName:@"USERID"];
+    
+    //更改USERID的内容
+    //删除USERID节点
+    [emailLe removeElementForName:@"USERID"];
+    
+    //添加回节点
+    NSXMLElement *userIdELe = [NSXMLElement elementWithName:@"USEID" stringValue:emails[0]];
+    
+    [emailLe addChild:userIdELe];
+}
 - (void)clearEmailAddresses { }
 
 
