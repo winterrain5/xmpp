@@ -8,16 +8,9 @@
 
 #import "CSMainMessageController.h"
 #import "XMPPvCardTemp.h"
-#import "CSEditVCardViewController.h"
-@interface CSMainMessageController () <UITableViewDelegate,CSEditVCardViewControllerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-@property (weak, nonatomic) IBOutlet UILabel *accountLbl;
-@property (weak, nonatomic) IBOutlet UILabel *position;
-@property (weak, nonatomic) IBOutlet UILabel *telLbl;
-@property (weak, nonatomic) IBOutlet UILabel *emaiLbl;
-@property (weak, nonatomic) IBOutlet UIButton *avatarImage;
-@property (weak, nonatomic) IBOutlet UILabel *nickNameLbl;
-@property (weak, nonatomic) IBOutlet UILabel *orgUnitLbl;
-@property (weak, nonatomic) IBOutlet UILabel *departmentLbl;
+#import "CSEditVCardController.h"
+@interface CSMainMessageController () <UITableViewDelegate,CSEditVCardControllerDelegate,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
 
 @end
 @implementation CSMainMessageController
@@ -57,29 +50,7 @@
     
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-   
-    //根据tag 操作
-    
-    //获取cell
-    UITableViewCell *selectCell = [tableView cellForRowAtIndexPath:indexPath];
-    
-    NSInteger tag = selectCell.tag;
-    
 
-    if (tag == 1) {
-        
-        CSLog(@"进入下一个");
-
-    }
-    
-    if (tag == 2) {
-        return;
-         CSLog(@"没有操作");
-    }
-   
-}
 /**
  *  选择图片
  */
@@ -122,21 +93,12 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     
     //保存图片到服务器
-    [self editVCardViewController:nil didFinishedSave:nil];
+    [self editVCardController:nil didFinishedSave:nil];
     
 }
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    //获取目标控制器
-    id dsetVc = segue.destinationViewController;
-    if ([dsetVc isKindOfClass:[CSEditVCardViewController class]]) {
-        CSEditVCardViewController *editVc = dsetVc;
-        editVc.cell = sender;
-        editVc.delegate = self;
-    }
-    
-}
+
 #pragma mark - 编辑信息控制器的代理
-- (void) editVCardViewController:(CSEditVCardViewController *)edtiVc didFinishedSave:(id)sender {
+- (void) editVCardController:(CSEditVCardController *)edtiVc didFinishedSave:(id)sender {
     CSLog(@"保存完成");
     
     XMPPvCardTemp *myvCard = [CSXMPPTool sharedCSXMPPTool].vCard.myvCardTemp;
@@ -169,5 +131,19 @@
  */
 - (IBAction)modifyAvatar {
     [self chooseImg];
+}
+- (IBAction)editMsgBtnClick:(id)sender {
+    
+    [self performSegueWithIdentifier:@"toEditVc" sender:self];
+}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    //获取目标控制器
+    id dsetVc = segue.destinationViewController;
+    if ([dsetVc isKindOfClass:[CSEditVCardController class]]) {
+        CSEditVCardController *editVc = dsetVc;
+        editVc.msgController = sender;
+        editVc.delegate = self;
+    }
+    
 }
 @end

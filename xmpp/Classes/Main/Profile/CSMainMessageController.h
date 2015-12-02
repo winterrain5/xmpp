@@ -9,7 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @interface CSMainMessageController : UITableViewController
-
+@property (weak, nonatomic) IBOutlet UILabel *accountLbl;
+@property (weak, nonatomic) IBOutlet UILabel *position;
+@property (weak, nonatomic) IBOutlet UILabel *telLbl;
+@property (weak, nonatomic) IBOutlet UILabel *emaiLbl;
+@property (weak, nonatomic) IBOutlet UIButton *avatarImage;
+@property (weak, nonatomic) IBOutlet UILabel *nickNameLbl;
+@property (weak, nonatomic) IBOutlet UILabel *orgUnitLbl;
+@property (weak, nonatomic) IBOutlet UILabel *departmentLbl;
 
 
 @end

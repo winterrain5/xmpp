@@ -176,7 +176,6 @@
 		259845711C0837EB006AF515 /* CSXMPPTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845701C0837EB006AF515 /* CSXMPPTool.m */; settings = {ASSET_TAGS = (); }; };
 		259845771C084400006AF515 /* CSRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845761C084400006AF515 /* CSRegisterViewController.m */; settings = {ASSET_TAGS = (); }; };
 		2598457A1C088593006AF515 /* CSMainMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845791C088593006AF515 /* CSMainMessageController.m */; settings = {ASSET_TAGS = (); }; };
-		2598457D1C0891D5006AF515 /* CSEditVCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2598457C1C0891D5006AF515 /* CSEditVCardViewController.m */; settings = {ASSET_TAGS = (); }; };
 		259845811C094425006AF515 /* CSContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845801C094425006AF515 /* CSContactViewController.m */; settings = {ASSET_TAGS = (); }; };
 		259845841C094C0C006AF515 /* CSContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845831C094C0C006AF515 /* CSContactCell.m */; settings = {ASSET_TAGS = (); }; };
 		259845871C0A9EFA006AF515 /* CSAddContactController.m in Sources */ = {isa = PBXBuildFile; fileRef = 259845861C0A9EFA006AF515 /* CSAddContactController.m */; settings = {ASSET_TAGS = (); }; };
@@ -550,8 +549,6 @@
 		259845761C084400006AF515 /* CSRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSRegisterViewController.m; sourceTree = "<group>"; };
 		259845781C088593006AF515 /* CSMainMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMainMessageController.h; sourceTree = "<group>"; };
 		259845791C088593006AF515 /* CSMainMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMainMessageController.m; sourceTree = "<group>"; };
-		2598457B1C0891D5006AF515 /* CSEditVCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSEditVCardViewController.h; sourceTree = "<group>"; };
-		2598457C1C0891D5006AF515 /* CSEditVCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSEditVCardViewController.m; sourceTree = "<group>"; };
 		2598457F1C094425006AF515 /* CSContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSContactViewController.h; sourceTree = "<group>"; };
 		259845801C094425006AF515 /* CSContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSContactViewController.m; sourceTree = "<group>"; };
 		259845821C094C0C006AF515 /* CSContactCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSContactCell.h; sourceTree = "<group>"; };
@@ -1674,8 +1671,6 @@
 				259845581C0821D4006AF515 /* CSProfileViewController.m */,
 				259845781C088593006AF515 /* CSMainMessageController.h */,
 				259845791C088593006AF515 /* CSMainMessageController.m */,
-				2598457B1C0891D5006AF515 /* CSEditVCardViewController.h */,
-				2598457C1C0891D5006AF515 /* CSEditVCardViewController.m */,
 				25529FEF1C0C641900DF2811 /* CSEditVCardController.h */,
 				25529FF01C0C641900DF2811 /* CSEditVCardController.m */,
 			);
@@ -1998,7 +1993,6 @@
 				259843431C07E9C7006AF515 /* DDAbstractDatabaseLogger.m in Sources */,
 				259844EC1C07EDA1006AF515 /* XMPPRoomHybridStorage.m in Sources */,
 				259844ED1C07EDA1006AF515 /* XMPPRoomMessageHybridCoreDataStorageObject.m in Sources */,
-				2598457D1C0891D5006AF515 /* CSEditVCardViewController.m in Sources */,
 				259843C11C07ED5D006AF515 /* XMPPModule.m in Sources */,
 				259844E71C07EDA1006AF515 /* XMPPRoom.xcdatamodeld in Sources */,
 				25CEC8221C0AC876002BB779 /* CSChatViewController.m in Sources */,

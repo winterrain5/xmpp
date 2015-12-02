@@ -8,9 +8,9 @@
 
 #import "CSChatViewController.h"
 #import <AVFoundation/AVAudioRecorder.h>
-//#import <AVFoundation/AVAudioSettings.h>
 #import <Availability.h>
 #import <AVFoundation/AVAudioPlayer.h>
+#import "XMPPvCardTemp.h"
 @interface CSChatViewController () <NSFetchedResultsControllerDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,XMPPOutgoingFileTransferDelegate> {
     /**结果控制器*/
     NSFetchedResultsController *_resultController;
@@ -18,6 +18,9 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UITextField *chatTf;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraint;
+@property (nonatomic, weak) UIImageView *avartarImg;
+
+
 @property (nonatomic, retain) AVAudioRecorder   *recorder;
 @property (nonatomic, retain) AVAudioPlayer     *player;
 
@@ -37,6 +40,9 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    self.tabBarController.tabBar.hidden = YES;
+
     
     //分割字符
     NSArray *strArray = [self.nickName componentsSeparatedByString:@"@"];
@@ -65,6 +71,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(kbFrmWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
     
+    //滚动表格到当前行
+    if (_resultController.fetchedObjects.count > 0) {
+        NSIndexPath *lastIndex = [NSIndexPath indexPathForRow:_resultController.fetchedObjects.count - 1 inSection:0];
+        [self.tableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    } else {
+        return;
+    }
+    
+    
 }
 - (void) loadMsgData {
     //1 上下文
@@ -88,6 +103,9 @@
     _resultController.delegate = self;
     NSError *error;
     [_resultController performFetch:&error];
+    
+   
+    
 
 }
 #pragma mark 键盘将显示
@@ -96,7 +114,7 @@
     // 键盘的高度
     CGFloat keyboardH = kbBounds.size.height;
     
-    // iPad横屏时键盘的高度是bounds的width[打印测试即可]
+    // iPad横屏时键盘的高度是bounds的width
     BOOL isLandscape = UIInterfaceOrientationIsLandscape(self.interfaceOrientation);
     if (!iSiPhoneDevice && isLandscape) {
         keyboardH = kbBounds.size.width;
@@ -126,17 +144,20 @@
     [self.tableView scrollToRowAtIndexPath:lastIndex atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-#pragma - tableView的数据源
+
+#pragma -mark tableView的数据源
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
     return _resultController.fetchedObjects.count;
+   
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //登录用户的电子名片信息
+    XMPPvCardTemp *myvCard = [CSXMPPTool sharedCSXMPPTool].vCard.myvCardTemp;
+   
     
     //获取聊天信息
     XMPPMessageArchiving_Message_CoreDataObject *msgObj = _resultController.fetchedObjects[indexPath.row];
@@ -163,7 +184,13 @@
                 NSData *imgData = [[NSData alloc] initWithBase64EncodedString:imgBase64Str options:0];
                 UIImage *img = [UIImage imageWithData:imgData];
                 UIImageView *imgMsg = (UIImageView *) [cell viewWithTag:100];
+                imgMsg.layer.cornerRadius = 5;
+                imgMsg.clipsToBounds = YES;
                 imgMsg.image = img;
+                cell.backgroundColor = [UIColor clearColor];
+                
+                [self setupAvartatImg:cell XMPPvCardTemp:myvCard];
+
                 return cell;
             }
 
@@ -179,12 +206,41 @@
     
     UILabel *contentLabel = (UILabel *)[cell viewWithTag:100];
     contentLabel.text = message.body;
+    [self setupAvartatImg:cell XMPPvCardTemp:myvCard];
     
     cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
+/**
+ *  设置头像
+ */
+- (void) setupAvartatImg:(UITableViewCell *) cell XMPPvCardTemp:(XMPPvCardTemp *) myvCard{
+    
+    UIImageView *avartatImg = (UIImageView *)[cell viewWithTag:102];
+    avartatImg.layer.cornerRadius = 20;
+    avartatImg.clipsToBounds = YES;
+    if (myvCard.photo) {
+        avartatImg.image =  [UIImage imageWithData:myvCard.photo];
+        
+    } else {
+        avartatImg.image = [UIImage imageNamed:@"avatar_default"];
+    }
+    
+    UIImageView *avartatFriendImg = (UIImageView *)[cell viewWithTag:101];
+    avartatFriendImg.layer.cornerRadius = 20;
+    avartatFriendImg.clipsToBounds = YES;
+    
+    //从服务器获取头像
+    NSData * avartatFriendImgData = [[CSXMPPTool sharedCSXMPPTool].vCardAvatar photoDataForJID:self.friendJid];
+    if (avartatFriendImgData) {
+        avartatFriendImg.image = [UIImage imageWithData:avartatFriendImgData];
+        
+    } else {
+        avartatFriendImg.image = [UIImage imageNamed:@"avatar_default_small"];
+    }
+}
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 60;
+    return 80;
 }
 #pragma mark 发送聊天数据
 - (BOOL) textFieldShouldReturn:(UITextField *)textField {
@@ -212,7 +268,7 @@
     
     [self presentViewController:imgPic animated:YES completion:nil];
 }
-#pragma mark -选择器的代理
+#pragma -mark 选择器的代理
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     //获取选择后的图片
     UIImage *selectedImg = info[UIImagePickerControllerOriginalImage];
@@ -240,39 +296,17 @@
     [[CSXMPPTool sharedCSXMPPTool].xmppStream sendElement:msg];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-    CSLog(@"%@",msg);
+   
 
 }
 /**
  *  开始录音
  */
 - (IBAction)startRecord {
-    NSString *path =  [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    path = [path stringByAppendingPathComponent:[XMPPStream generateUUID]];
-    path = [path stringByAppendingPathExtension:@"wav"];
-    
-    NSURL *URL = [NSURL fileURLWithPath:path];
-    NSDictionary *dic = nil;
-    _recorder = [[AVAudioRecorder alloc] initWithURL:URL settings:dic error:nil];
-    [_recorder prepareToRecord];
-    [_recorder record];
+  
 }
 - (IBAction)sendRecord {
-    [_recorder stop];
-//    NSArray *resources = [[CSXMPPTool sharedCSXMPPTool].roster sortedResources:YES];
-//    for (XMPPResourceMemoryStorageObject *object in resources) {
-//        if ([object.jid.bare isEqualToString:self.friendJid.bare]) {
-//            NSData *data = [[[NSData alloc] initWithContentsOfURL:_recorder.url] copy];
-//            NSError *err;
-//            [self.xmppOutgoingFileTransfer sendData:data named:_recorder.url.lastPathComponent toRecipient:object.jid description:nil error:&err];
-//            if (err) {
-//                NSLog(@"%@",err);
-//            }
-//            break;
-//        }
-//    }
-//    
-//    _recorder = nil;
+
 }
 - (IBAction)cancelRecord {
 }

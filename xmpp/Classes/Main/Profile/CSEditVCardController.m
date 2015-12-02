@@ -7,9 +7,15 @@
 //
 
 #import "CSEditVCardController.h"
-
+#import "CSMainMessageController.h"
 @interface CSEditVCardController ()
+@property (weak, nonatomic) IBOutlet UITextField *nickNameTf;
+@property (weak, nonatomic) IBOutlet UITextField *orgUnitTf;
+@property (weak, nonatomic) IBOutlet UITextField *departmentTf;
+@property (weak, nonatomic) IBOutlet UITextField *positionTf;
+@property (weak, nonatomic) IBOutlet UITextField *emailTf;
 
+@property (weak, nonatomic) IBOutlet UITextField *telTf;
 @end
 
 @implementation CSEditVCardController
@@ -17,66 +23,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.nickNameTf.text = self.msgController.nickNameLbl.text;
+    self.orgUnitTf.text = self.msgController.orgUnitLbl.text;
+    self.departmentTf.text = self.msgController.departmentLbl.text;
+    self.positionTf.text = self.msgController.position.text;
+    self.emailTf.text = self.msgController.emaiLbl.text;
+    self.telTf.text = self.msgController.telLbl.text;
+}
+
+- (IBAction)saveBtnClick:(id)sender {
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    self.msgController.nickNameLbl.text = self.nickNameTf.text;
+    self.msgController.orgUnitLbl.text = self.orgUnitTf.text ;
+    self.msgController.departmentLbl.text = self.departmentTf.text ;
+    self.msgController.position.text = self.positionTf.text ;
+    self.msgController.emaiLbl.text = self.emailTf.text ;
+    self.msgController.telLbl.text = self.telTf.text ;
     
-    // Configure the cell...
+    [self.msgController.tableView layoutSubviews];
     
-    return cell;
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    //通知代理
+    if ([self.delegate respondsToSelector:@selector(editVCardController:didFinishedSave:)]) {
+        [self.delegate editVCardController:self didFinishedSave:sender];
+    }
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
